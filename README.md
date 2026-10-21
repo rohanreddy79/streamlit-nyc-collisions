@@ -1,6 +1,6 @@
 # NYC Motor Vehicle Collisions Dashboard
 
-[![CI](https://github.com/rohanreddy79/-Data-Science-Web-App-with-Streamlit-and-Python/actions/workflows/ci.yml/badge.svg)](https://github.com/rohanreddy79/-Data-Science-Web-App-with-Streamlit-and-Python/actions/workflows/ci.yml)
+[![CI](https://github.com/rohanreddy79/streamlit-nyc-collisions/actions/workflows/ci.yml/badge.svg)](https://github.com/rohanreddy79/streamlit-nyc-collisions/actions/workflows/ci.yml)
 
 **A single-file Streamlit app that loads the NYC Open Data "Motor Vehicle Collisions - Crashes" CSV and lets you explore where and when crashes injure people, with an injury map, a 3-D hexagon layer by hour, a per-minute histogram and a "most dangerous streets" table.**
 
