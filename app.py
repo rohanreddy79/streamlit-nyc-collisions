@@ -1,3 +1,5 @@
+import os
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -5,14 +7,17 @@ import pydeck as pdk
 import plotly.express as px
 
 
-DATA_URL = (
-    "C:/Users/Rohan/Desktop/Project/project 2/streamlit-nyc/Motor_Vehicle_Collisions_-_Crashes.csv"
+# Path (or URL) of the collisions CSV. Defaults to a copy next to this file;
+# override with the DATA_URL environment variable. See README "Running it".
+DATA_URL = os.environ.get(
+    "DATA_URL",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "Motor_Vehicle_Collisions_-_Crashes.csv"),
 )
 
 st.title("Motor Vehicle Collisions in New York City")
 st.markdown("This application s a streamlit dashboard that can be used to analyze motor Vehicle Collisions in NYC 🗽")
 
-@st.cache(persist=True)
+@st.cache_data(persist=True)
 def load_data(nrows):
     data = pd.read_csv(DATA_URL, nrows=nrows, parse_dates= [['CRASH_DATE', 'CRASH_TIME']])
     data.dropna(subset=['LATITUDE','LONGITUDE'], inplace=True)
@@ -38,7 +43,7 @@ st.markdown("Vehicle collision between %i:00 and %i:00" % (hour,(hour + 1)%24))
 midpoint = (np.average(data['latitude']), np.average(data['longitude']))
 
 st.write(pdk.Deck(
-    map_style="mapbox://styles/mapbox/light-v9",
+    map_style="light",  # pydeck resolves this to a Carto style; the old mapbox:// URL needs a Mapbox token
     initial_view_state={
     "latitude": midpoint[0],
     "longitude": midpoint[1],
@@ -70,11 +75,11 @@ st.write(fig)
 st.header("Top 5 dangerous streets by affected type")
 select=st.selectbox('Affected type of people', ['Pedestrians', 'Cyclists', 'Motorists'])
 
-if select == 'Pedestrains':
-    st.write(original_data.query("injured_pedstrains >=1")[["on_street_name", "injured_pedstrains"]].sort_values(by=['injured_pedstrains'], ascending=False).dropna(how='any')[:5])
+if select == 'Pedestrians':
+    st.write(original_data.query("injured_pedestrians >=1")[["on_street_name", "injured_pedestrians"]].sort_values(by=['injured_pedestrians'], ascending=False).dropna(how='any')[:5])
 
 elif select == 'Cyclists':
-    st.write(original_data.query("injured_cyclists >=1")[["on_street_name", "injured_cyclists"]].sort_values(by=['injured_cyclistss'], ascending=False).dropna(how='any')[:5])
+    st.write(original_data.query("injured_cyclists >=1")[["on_street_name", "injured_cyclists"]].sort_values(by=['injured_cyclists'], ascending=False).dropna(how='any')[:5])
 
 else:
     st.write(original_data.query("injured_motorists >=1")[["on_street_name", "injured_motorists"]].sort_values(by=['injured_motorists'], ascending=False).dropna(how='any')[:5])
